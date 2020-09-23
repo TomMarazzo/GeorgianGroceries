@@ -1,1 +1,21 @@
-﻿<h1>Welcome to Georgian's Online Grocery Store</h1>
+﻿@model IEnumerable<GeorgianGroceries.Models.Category>
+<h1>Welcome to Georgian's Online Grocery Store</h1>
+<ul>
+    @foreach (var c in Model)
+    {
+        <li>
+            <a asp-controller="Store" asp-action="Browse" asp-route-category="@c.Name">@c.Name</a>
+        </li>
+    }
+</ul>
+@*<ul>
+        <li>
+            <a asp-controller="Store" asp-action="Browse" asp-route-category="Produce"> Produce </a>
+        </li>
+        <li>
+            <a asp-controller="Store" asp-action="Browse" asp-route-category="Meat">Meat </a>
+        </li>
+        <li>
+            <a asp-controller="Store" asp-action="Browse" asp-route-category="Fruit">Fruit </a>
+        </li>
+    </ul>*@
