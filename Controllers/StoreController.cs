@@ -27,5 +27,12 @@ namespace GeorgianGroceries.Controllers
             ViewBag.category = category;
             return View();
         }
+
+        // /Store/AddCatyegory
+        public IActionResult AddCategory()
+        {
+            //load a form to capture and object from a user
+            return View();
+        }
     }
 }
