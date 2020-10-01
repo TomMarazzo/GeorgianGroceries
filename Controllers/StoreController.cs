@@ -16,7 +16,7 @@ namespace GeorgianGroceries.Controllers
             var categories = new List<Category>();
             for (var i = 1; i <= 10; i++)
             {
-                categories.Add(new Category { Id = i, Name = "Category " + i.ToString() });
+                categories.Add(new Category { CategoryId = i, Name = "Category " + i.ToString() });
             }
             //modify the return View so that it now accepts a list of categories to pass to the view for display
             return View(categories);
