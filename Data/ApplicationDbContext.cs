@@ -27,25 +27,25 @@ namespace GeorgianGroceries.Data
                     .HasOne(p => p.Category)
                     .WithMany(c => c.Products)
                     .HasForeignKey(p => p.CategoryId)
-                    .HasConstraintName("FK_Products_CategoryID");
+                    .HasConstraintName("FK_Products_CategoryId");
             //Product and OrderDetail
             builder.Entity<OrderDetail>()
                    .HasOne(p => p.Product)
                    .WithMany(c => c.OrderDetails)
                    .HasForeignKey(p => p.ProductId)
-                   .HasConstraintName("FK_OrderDetails_ProductID");
+                   .HasConstraintName("FK_OrderDetails_ProductId");
             //Product and Cart
             builder.Entity<Cart>()
                    .HasOne(p => p.Product)
                    .WithMany(c => c.Carts)
                    .HasForeignKey(p => p.ProductId)
-                   .HasConstraintName("FK_Carts_ProductID");
+                   .HasConstraintName("FK_Carts_ProductId");
             //OrderDetail and Order
             builder.Entity<OrderDetail>()
                    .HasOne(p => p.Order)
                    .WithMany(c => c.OrderDetails)
                    .HasForeignKey(p => p.OrderId)
-                   .HasConstraintName("FK_OrderDetails_ProductID");
+                   .HasConstraintName("FK_OrderDetails_OrderId");
 
         }
 

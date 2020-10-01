@@ -17,6 +17,7 @@ namespace GeorgianGroceries.Models
         public string Province { get; set; }
         public string PostalCode { get; set; }
         public string Phone { get; set; }
+        public string email { get; set; }
         public float Total { get; set; }
         //Child reference 
         public List<OrderDetail> OrderDetails { get; set; }
