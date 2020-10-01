@@ -8,8 +8,11 @@ namespace GeorgianGroceries.Models
 {
     public class Category
     {       
-        public int Id { get; set; }
+        public int CategortyId { get; set; } //Primary Key
         [Required]
         public string Name { get; set; }
+
+        public List<Product> Products { get; set; }
+        
     }
 }
