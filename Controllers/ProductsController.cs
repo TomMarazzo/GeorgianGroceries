@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GeorgianGroceries.Data;
 using GeorgianGroceries.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace GeorgianGroceries.Controllers
 {
@@ -23,7 +25,7 @@ namespace GeorgianGroceries.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Products.Include(p => p.Category);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await applicationDbContext.OrderBy(p => p.Name).ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -48,7 +50,7 @@ namespace GeorgianGroceries.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories.OrderBy(c => c.Name), "CategoryId", "Name");
             return View();
         }
 
@@ -57,10 +59,30 @@ namespace GeorgianGroceries.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Name,Description,Photo,Price,CategoryId")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Name,Description,Price,CategoryId")] Product product, IFormFile Photo)
         {
             if (ModelState.IsValid)
             {
+                // Check for a photo and upload
+                if(Photo.Length > 0)
+                {
+                    //get a temp location of the uplaod file
+                    var tempFile = Path.GetTempFileName();
+
+                    //Create a unique name using the Globally Unique ID (GUID) class
+                    var fileName = Guid.NewGuid() + "-" + Photo.FileName;
+
+                    //Set the destination - dynamic - PATH and file name
+                    var uploadPath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\img\\product_uploads\\" + fileName;
+
+                    //Use a STREAM to create the new file
+                    using var stream = new FileStream(uploadPath, FileMode.Create);
+                    await Photo.CopyToAsync(stream);
+
+                    //Add unique file name as the photo property of the new product object
+                    product.Photo = fileName;
+                }
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
