@@ -9,9 +9,11 @@ using GeorgianGroceries.Data;
 using GeorgianGroceries.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GeorgianGroceries.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
