@@ -35,10 +35,10 @@ namespace GeorgianGroceries
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             //Enable Google Auth using the API keys we created in Google Dev Console
             services.AddAuthentication()
-                .AddGoogle(option =>
+                .AddGoogle(options =>
                 {
-                    option.ClientId = Configuration.GetSection("Authentication:Google")["ClientId"];
-                    option.ClientSecret = Configuration.GetSection("Authentication: Google")["ClientSecret"];
+                    options.ClientId = Configuration.GetSection("Authentication:Google")["ClientId"];
+                    options.ClientSecret = Configuration.GetSection("Authentication:Google")["ClientSecret"];
                 });
 
             services.AddControllersWithViews();
