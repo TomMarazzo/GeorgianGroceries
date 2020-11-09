@@ -30,6 +30,7 @@ namespace GeorgianGroceries.Controllers
             return View(await applicationDbContext.OrderBy(p => p.Name).ToListAsync());
         }
 
+        [AllowAnonymous]
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {

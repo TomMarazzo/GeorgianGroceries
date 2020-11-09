@@ -76,3 +76,11 @@ body {
 .img-thumbnail {
     width: 100px;
 }
+
+.thumb {
+    width: 100px;
+}
+
+.input-small{
+    width: 50px
+}

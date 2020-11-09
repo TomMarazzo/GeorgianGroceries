@@ -9,6 +9,7 @@ namespace GeorgianGroceries.Models
     public class Product
     {
         public int ProductId { get; set; } //PK
+
         [Required]
         public string Name { get; set; }
         [Required]
