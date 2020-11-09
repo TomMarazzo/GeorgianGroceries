@@ -1,51 +1,61 @@
 ﻿@model GeorgianGroceries.Models.Product
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Product Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>Product Details</h1>
 
 <div>
-    <h4>Product</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Photo)
-            
+
         </dt>
-        <dd class = "col-sm-10">
-            <img src="@("~/img/product_uploads/"+Model.Photo)" asp-append-version="true" width="250px" height="250px" />
+        <dd class="col-sm-10">
+            @if (Model.Photo != null)
+            {
+                <img src="@("~/img/product_uploads/"+Model.Photo)" asp-append-version="true" width="250px" height="250px" />
+                <!--<img src="~/img/product_uploads/@Model.Photo" alt="Product Photo" />-->
+            }
 
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Price)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Price)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Category.Name)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<!--Form-->
+<form method="post" action="/Shop/AddToCart" class="offset-2">
+    <!--Hidden Field forhte selected produict id-->
+    <input type="hidden" id="ProductId" name="ProuctId" value="@Model.ProductId" />
+    <div class="form-group">
+        <label class="control-label" for="Quantity">Quantity: </label>
+        <input name="Quantity" id="Quantity" required min="1" max="99999" type="number" class="input-small" />
+    </div>
+    <button class="btn btn-primary">Add To Cart</button>
+</form>
+<a href="javascript:history.go(-1);"> << Back</a>
