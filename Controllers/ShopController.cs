@@ -42,6 +42,9 @@ namespace GeorgianGroceries.Controllers
             // get current Date & Time using built in .net function
             var currentDateTime = DateTime.Now;
 
+            // CustomerId variable
+            var CustomerId = GetCustomerId();
+
             // create and save a new Cart object
             var cart = new Cart
             {
@@ -49,7 +52,7 @@ namespace GeorgianGroceries.Controllers
                 Quantity = Quantity,
                 Price = price,
                 DateCreated = currentDateTime,
-                CustomerId = "Test"  //make this dynamic for now
+                CustomerId = CustomerId
             };
 
             _context.Carts.Add(cart);
@@ -57,6 +60,31 @@ namespace GeorgianGroceries.Controllers
 
             // redirect to the Cart view
             return RedirectToAction("Cart");
+        }
+
+        private string GetCustomerId()
+        {
+            // check the session for an existing CustomerId
+            if (HttpContext.Session.GetString("CustomerId") == null)
+            {
+                // if we don't already have an existing CustomerId in the session, check if customer is logged in
+                var CustomerId = "";
+
+                // if customer is logged in, use their email as the CustomerId
+                if (User.Identity.IsAuthenticated)
+                {
+                    CustomerId = User.Identity.Name; //Name = email address
+                }
+                // if the customer is anonymous, use Guid to create a new identifier
+                else 
+                {
+                    CustomerId = Guid.NewGuid().ToString();
+                }
+                // now store the CustomerId in a session variable
+                HttpContext.Session.SetString("CustomerId", CustomerId);
+            }
+            // return the Session variable
+            return HttpContext.Session.GetString("CustomerId");
         }
 
         //Shop/Cart

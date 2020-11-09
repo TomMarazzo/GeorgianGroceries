@@ -40,7 +40,8 @@ namespace GeorgianGroceries
                     options.ClientId = Configuration.GetSection("Authentication:Google")["ClientId"];
                     options.ClientSecret = Configuration.GetSection("Authentication:Google")["ClientSecret"];
                 });
-
+            //Enable Session Support to store identities for the shopping cart
+            services.AddSession();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -66,6 +67,10 @@ namespace GeorgianGroceries
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //Enable Session Support to store identities when Shopping BEFORE url mapping
+            app.UseSession();
+
 
             app.UseEndpoints(endpoints =>
             {
