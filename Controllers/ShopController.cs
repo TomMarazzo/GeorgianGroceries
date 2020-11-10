@@ -33,7 +33,7 @@ namespace GeorgianGroceries.Controllers
             ViewBag.category = _context.Categories.Find(id).Name.ToString();
             return View(products);
         }
-        [HttpPost]
+        
         public IActionResult AddToCart(int ProductId, int Quantity)
         {
             // query the db for the product price
@@ -90,7 +90,23 @@ namespace GeorgianGroceries.Controllers
         //Shop/Cart
         public IActionResult Cart()
         {
-            return View();
+            // fetch current cart for display
+            var CustomerId = "";
+            // in case user comes to cart page before adding anything, identify them first
+            if (HttpContext.Session.GetString("CustomerId") == null)
+            {
+                CustomerId = GetCustomerId();
+            }
+            else
+            {
+                CustomerId = HttpContext.Session.GetString("CustomerId");
+            }
+
+            // query the db for this customer
+            var cartItems = _context.Carts.Where(c => c.CustomerId == CustomerId).ToList();
+
+            // pass the data to the view for display
+            return View(cartItems);
         }
     }
 }
