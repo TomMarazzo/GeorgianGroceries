@@ -33,7 +33,7 @@ namespace GeorgianGroceries.Controllers
             ViewBag.category = _context.Categories.Find(id).Name.ToString();
             return View(products);
         }
-
+        [HttpPost]
         public IActionResult AddToCart(int ProductId, int Quantity)
         {
             // query the db for the product price
