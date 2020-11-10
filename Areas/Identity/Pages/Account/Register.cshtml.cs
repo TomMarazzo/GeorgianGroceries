@@ -79,6 +79,7 @@ namespace GeorgianGroceries.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     //AUTOMATICALLY add new Users to the Customer Role we created in the Database
+                   // var roleResult = await _userManager.AddToRoleAsync(user, "Administrator");
                     var roleResult = await _userManager.AddToRoleAsync(user, "Customer");
                     //****************************************************************************//
                     _logger.LogInformation("User created a new account with password.");
