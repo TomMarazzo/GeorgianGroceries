@@ -6,6 +6,8 @@ using GeorgianGroceries.Models;
 using Microsoft.AspNetCore.Http;
 using GeorgianGroceries.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GeorgianGroceries.Controllers
 {
@@ -33,7 +35,7 @@ namespace GeorgianGroceries.Controllers
             ViewBag.category = _context.Categories.Find(id).Name.ToString();
             return View(products);
         }
-        
+
         public IActionResult AddToCart(int ProductId, int Quantity)
         {
             // query the db for the product price
@@ -76,7 +78,7 @@ namespace GeorgianGroceries.Controllers
                     CustomerId = User.Identity.Name; //Name = email address
                 }
                 // if the customer is anonymous, use Guid to create a new identifier
-                else 
+                else
                 {
                     CustomerId = Guid.NewGuid().ToString();
                 }
@@ -103,10 +105,20 @@ namespace GeorgianGroceries.Controllers
             }
 
             // query the db for this customer
-            var cartItems = _context.Carts.Where(c => c.CustomerId == CustomerId).ToList();
+            //Add the "Include(c => c.Product)" to have our query include the Parent Products into our cart
+            var cartItems = _context.Carts.Include(c => c.Product).Where(c => c.CustomerId == CustomerId).ToList();
 
             // pass the data to the view for display
             return View(cartItems);
+        }
+
+        //Shop/Checkout
+        [Authorize]
+        public IActionResult Checkout()
+        {
+
+
+            return View();
         }
     }
 }

@@ -1,60 +1,67 @@
 ﻿@model IEnumerable<GeorgianGroceries.Models.Cart>
 
 @{
-    ViewData["Title"] = "Cart";
+    ViewData["Title"] = " Your Cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    double total = 0;
 }
 
-<h1>Cart</h1>
+<h1>Your Cart</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                @Html.DisplayNameFor(model => model.Product)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerId)
-            </th>
-            <th>
+            <th></th>
+            <th class="text-right">
                 @Html.DisplayNameFor(model => model.Quantity)
             </th>
-            <th>
+            <th class="text-right">
                 @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
+            total += (item.Quantity * item.Price);
+            <tr>
+
+                <td>
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId">@item.Product.Name</a>
+                    @*@Html.DisplayFor(modelItem => item.Product.Description)*@
+                </td>
+                <td>
+                    @if (item.Product.Photo != null)
+                    {
+                        <img src="~/img/product_uploads/@item.Product.Photo" alt="Product Photo" class="thumb" />
+                    }
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td class="text-right">
+                    @String.Format("{0:c}", item.Price)
+                </td>
+                <td>
+                    <a asp-action="RemoveFromCart" asp-route-id="@item.CartId">Delete</a>
+                </td>
+            </tr>
+        }
+
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
+            <td colspan="4" class="text-right">
+                @String.Format("{0:c}", total)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CustomerId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CartId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CartId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CartId">Delete</a>
+                <a class="btn btn-primary" asp-action="Index"> Keep Shopping</a>
+                <a class="btn btn-primary" asp-action="Checkout">Check Out</a> 
             </td>
         </tr>
-}
+
     </tbody>
 </table>
