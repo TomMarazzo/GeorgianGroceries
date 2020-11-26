@@ -19,8 +19,10 @@ namespace GeorgianGroceries.Controllers
     public class ShopController : Controller
     {
         private readonly ApplicationDbContext _context;
-        IConfiguration _iconfiguation;
+        // configuration dependency needed to read Stripe Keys from appsettings.json or the secret key store
+        private IConfiguration _iconfiguation;
 
+        // this controller uses Depedency Injection - it requires a db connection object when it's created
         public ShopController(ApplicationDbContext context, IConfiguration iconfiguation)
         {
             _context = context;
@@ -96,7 +98,7 @@ namespace GeorgianGroceries.Controllers
             return HttpContext.Session.GetString("CustomerId");
         }
 
-        //Shop/Cart
+        //GET /Shop/Cart
         public IActionResult Cart()
         {
             // fetch current cart for display
@@ -119,6 +121,23 @@ namespace GeorgianGroceries.Controllers
             return View(cartItems);
         }
 
+        //GET /Shop/RemoveFromCart
+        public IActionResult RemoveFromCart(int id)
+        {
+            // find the item with this PK value
+            var cartItem = _context.Carts.Find(id);
+
+            // delete record from Carts table
+            if(cartItem != null)
+            {
+                _context.Carts.Remove(cartItem);
+                _context.SaveChanges();
+            }
+
+            //redirect to updated Cart
+            return RedirectToAction("Cart");
+        }
+
         //Shop/Checkout
         [Authorize]
         public IActionResult Checkout()
@@ -136,12 +155,10 @@ namespace GeorgianGroceries.Controllers
             order.OrderDate = DateTime.Now;
             order.CustomerId = User.Identity.Name;
             //calc order total based on the current cart
-            var cartCustomer = HttpContext.Session.GetString("CustomerId");
-            var cartItems = _context.Carts.Where(c => c.CustomerId == cartCustomer);
-            var orderTotal = (from c in cartItems
-                              select c.Quantity * c.Price).Sum();
-            order.Total = orderTotal;
-
+            order.Total = (from c in _context.Carts
+                           where c.CustomerId == HttpContext.Session.GetString("CustomerId")
+                           select c.Quantity * c.Price).Sum();
+                            
             //use SessionExtension Obj to store the order Obj in a session variable
             HttpContext.Session.SetObject("Order", order);
 
@@ -154,64 +171,16 @@ namespace GeorgianGroceries.Controllers
         public IActionResult Payment()
         {
             var order = HttpContext.Session.GetObject<Models.Order>("Order");
-            ViewBag.Total = order.Total * 100; // Stripe charge amount must be in Cents, not Dollars!
-            ViewBag.PublishableKey = _iconfiguation["Stripe:PublishableKey"]; //use iconfiguration to read key from appsettings.json
+            
+            ViewBag.Total = order.Total;
+
+            // also use the ViewBag to set the PublishableKey, which we can read from the Configuration
+            ViewBag.PublishableKey = _iconfiguation.GetSection("Stripe")["PublishableKey"];
+
+            // load the Payment view
             return View();
         }
 
-        //POST / Cart/Payment
-        [Authorize]
-        public IActionResult Payment(string stripeToken)
-        {
-            //retrieve order session
-            var order = HttpContext.Session.GetObject<Models.Order>("Order");
-
-            var customerService = new Stripe.CustomerService();
-            var charges = new Stripe.ChargeService();
-
-            //1. Create Stripe Customer
-            StripeConfiguration.ApiKey = _iconfiguation["Stripe:SecretKey"];
-            Stripe.Customer customer = customerService.Create(new Stripe.CustomerCreateOptions
-            {
-                Source = stripeToken,
-                Email = User.Identity.Name
-            });
-            //2. Create Stripe Charge
-            var charge = charges.Create(new Stripe.ChargeCreateOptions
-            {
-                Amount = Convert.ToInt32(order.Total * 100),
-                Description = "Georgian Groceries Purchase",
-                Currency = "cad",
-                Customer = customer.Id
-            }) ;
-
-            //3. Save a new order to our DB
-            _context.Orders.Add(order);
-            _context.SaveChanges();
-
-            //4. Save the Cart items as new OrderDetails to our DB
-            var cartItems = _context.Carts.Where(c => c.CustomerId == HttpContext.Session.GetString("CartUsername"));
-            foreach (var item in cartItems)
-            {
-                var orderDetail = new OrderDetail
-                {
-                    OrderId = order.OrderId,
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity,
-                    Price = item.Price
-                };
-                _context.OrderDetails.Add(orderDetail);
-            }
-
-            //5. Delete the Cart items from this Order
-            foreach (var item in cartItems)
-            {
-                _context.Carts.Remove(item);
-            }
-
-            //6. Load an order confirmation page, without an email!
-            return RedirectToAction("Details", "Orders", new { @id = order.OrderId });
-        }
-
+        
     }
 }
