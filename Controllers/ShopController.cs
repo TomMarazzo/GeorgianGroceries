@@ -222,6 +222,44 @@ namespace GeorgianGroceries.Controllers
             Session session = service.Create(options);
             return Json(new { id = session.Id });
         }
+        // GET: /Shop/SaveOrder
+        [Authorize]
+        public IActionResult SaveOrder()
+        {
+            // get the order from the session variable
+            var order = HttpContext.Session.GetObject<Models.Order>("Order");
+            // save as new order to the db
+            _context.Orders.Add(order);
+            _context.SaveChanges();
 
+            // save the line items as new order details records
+            var cartItems = _context.Carts.Where(c => c.CustomerId == HttpContext.Session.GetString("CustomerId"));
+            foreach (var item in cartItems)
+            {
+                var orderDetail = new OrderDetail
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    Price = item.Price,
+                    OrderId = order.OrderId
+                };
+
+                _context.OrderDetails.Add(orderDetail);
+            }
+            _context.SaveChanges();
+
+            // delete the items from the user's cart
+            foreach (var item in cartItems)
+            {
+                _context.Carts.Remove(item);
+            }
+            _context.SaveChanges();
+
+            // set the Session ItemCount variable (which shows in the navbar) back to zero
+            HttpContext.Session.SetInt32("ItemCount", 0);
+
+            // redirect to order confirmation page i.e. /Orders/Details/1
+            return RedirectToAction("Details", "Orders", new { @id = order.OrderId });
+        }
     }
 }
