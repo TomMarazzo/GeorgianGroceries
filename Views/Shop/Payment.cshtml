@@ -19,7 +19,7 @@
     var stripe = Stripe("@ViewBag.PublishableKey");
     var checkoutButton = document.getElementById("checkout-button");
     checkoutButton.addEventListener("click", function () {
-        fetch("/create-session", {
+        fetch("/Shop/ProcessPayment", {
             method: "POST",
         })
             .then(function (response) {
