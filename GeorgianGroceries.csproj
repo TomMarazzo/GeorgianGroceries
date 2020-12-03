@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-GeorgianGroceries-B6253003-FAAE-47BC-80F0-14337BC3B39F</UserSecretsId>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>GeorgianGroceries.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
