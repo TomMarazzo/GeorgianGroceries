@@ -27,7 +27,7 @@ namespace GeorgianGroceries.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Products.Include(p => p.Category);
-            return View(await applicationDbContext.OrderBy(p => p.Name).ToListAsync());
+            return View("Index", await applicationDbContext.OrderBy(p => p.Name).ToListAsync());
         }
 
         [AllowAnonymous]
