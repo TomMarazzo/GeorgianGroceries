@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeorgianGroceries", "GeorgianGroceries.csproj", "{189E03A9-94B6-4F94-946C-B6F596F4B778}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeorgianGroceries", "GeorgianGroceries.csproj", "{189E03A9-94B6-4F94-946C-B6F596F4B778}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeorgianGroceriesTests", "GeorgianGroceriesTests\GeorgianGroceriesTests.csproj", "{061F8141-83AC-4DEB-BCDA-94F8686ED18C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{189E03A9-94B6-4F94-946C-B6F596F4B778}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{189E03A9-94B6-4F94-946C-B6F596F4B778}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{189E03A9-94B6-4F94-946C-B6F596F4B778}.Release|Any CPU.Build.0 = Release|Any CPU
+		{061F8141-83AC-4DEB-BCDA-94F8686ED18C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{061F8141-83AC-4DEB-BCDA-94F8686ED18C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{061F8141-83AC-4DEB-BCDA-94F8686ED18C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{061F8141-83AC-4DEB-BCDA-94F8686ED18C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
