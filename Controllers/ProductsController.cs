@@ -36,7 +36,8 @@ namespace GeorgianGroceries.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                //return NotFound();
+                return View("Error");
             }
 
             var product = await _context.Products
