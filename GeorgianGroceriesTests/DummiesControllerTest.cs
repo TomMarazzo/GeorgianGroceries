@@ -9,6 +9,7 @@ namespace GeorgianGroceriesTests
         public void IndexReturnsSomething()
         {
             // arrange - set up any variables / objects needed for the method & scenario we want to test
+            var controller = new DummiesController();
 
             // act - execute the method and store the result returned (if any)
 
