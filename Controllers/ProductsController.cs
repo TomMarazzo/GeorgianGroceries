@@ -49,7 +49,7 @@ namespace GeorgianGroceries.Controllers
                 return View("404");
             }
 
-            return View(product);
+            return View("Details", product);
         }
 
         // GET: Products/Create
