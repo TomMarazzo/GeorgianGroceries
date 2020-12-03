@@ -10,6 +10,7 @@ namespace GeorgianGroceries.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["Message"] = "This is a message from the Controller";
             return View("Index");
         }
     }
