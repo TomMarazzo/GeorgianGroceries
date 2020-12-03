@@ -37,7 +37,7 @@ namespace GeorgianGroceries.Controllers
             if (id == null)
             {
                 //return NotFound();
-                return View("Error");
+                return View("404");
             }
 
             var product = await _context.Products
@@ -45,7 +45,8 @@ namespace GeorgianGroceries.Controllers
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
-                return NotFound();
+                //return NotFound();
+                return View("404");
             }
 
             return View(product);
