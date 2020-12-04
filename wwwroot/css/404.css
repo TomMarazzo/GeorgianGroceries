@@ -73,10 +73,10 @@ box-shadow: -25px 25px 40px rgba(0,0,0,0.5);
 
 @keyframes animate {
     0% {
-        transform: translateY(-50%, -50%) rotate(0deg);
+        transform: translate(-50%, -50%) rotate(0deg);
     }
 
     100% {
-        transform: translateY(-50%, -50%) rotate(360deg);
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 }
