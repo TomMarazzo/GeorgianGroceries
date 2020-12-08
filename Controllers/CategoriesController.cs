@@ -33,14 +33,14 @@ namespace GeorgianGroceries.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.CategoryId == id);
             if (category == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             return View(category);
@@ -79,7 +79,7 @@ namespace GeorgianGroceries.Controllers
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
-                return NotFound();
+                return View("404");
             }
             return View(category);
         }
@@ -93,7 +93,7 @@ namespace GeorgianGroceries.Controllers
         {
             if (id != category.CategoryId)
             {
-                return NotFound();
+                return View("404");
             }
 
             if (ModelState.IsValid)
@@ -107,7 +107,7 @@ namespace GeorgianGroceries.Controllers
                 {
                     if (!CategoryExists(category.CategoryId))
                     {
-                        return NotFound();
+                        return View("404");
                     }
                     else
                     {
@@ -124,14 +124,14 @@ namespace GeorgianGroceries.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.CategoryId == id);
             if (category == null)
             {
-                return NotFound();
+                return View("404");
             }
 
             return View(category);
